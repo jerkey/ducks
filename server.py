@@ -1,17 +1,17 @@
 import cart
-from bottle import route, run, template
+from bottle import route, run
 
 @route('/')
 def index():
-  return template('<b>Hello</b>!')
+  return '<b>Hello</b>!'
 
 @route('/cart/<cmd>')
 def cart_off(cmd):
   if not hasattr(cart, cmd):
-    return template('NOPE')
+    return 'NOPE'
 
   getattr(cart, cmd)()
-  return template('OK')
+  return 'OK'
 
 cart.unexport()
 cart.export()
