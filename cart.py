@@ -20,16 +20,16 @@ def export():
 def forward():
   gpio.write(dir1, 0)
   gpio.write(dir2, 0)
-  gpio.write(left, 1)
-  gpio.write(right, 1)
+  gpio.on(left)
+  gpio.on(right)
 
 def backward():
   gpio.write(dir1, 1)
   gpio.write(dir2, 1)
-  gpio.write(left, 1)
-  gpio.write(right, 1)
+  gpio.on(left)
+  gpio.on(right)
 
 def stop():
-  gpio.write(left, 0)
-  gpio.write(right, 0)
+  gpio.off(left)
+  gpio.off(right)
 
