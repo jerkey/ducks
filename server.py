@@ -13,6 +13,4 @@ def cart_off(cmd):
   getattr(cart, cmd)()
   return 'OK'
 
-cart.unexport()
-cart.export()
-run(host='localhost', port=8100)
+run(host='0.0.0.0', port=8100)
