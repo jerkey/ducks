@@ -1,6 +1,8 @@
 from bottle import route, run, auth_basic
 from subprocess import call
 
+import duckfavicon
+
 authfile = open('authfile','r') # first line of file is login, second is password
 lines=authfile.readlines()
 
@@ -10,7 +12,7 @@ def check(user, pw):
   else:
     return False
 
-hello='''
+hello=duckfavicon.favicon+'''
     <style> td, a { font-size: 4em; } table, .btn { display: block; }
     .open { background-color: green; } .stop{ background-color: red; } .close{ background-color: yellow; }
     </style><table>
@@ -23,6 +25,10 @@ hello='''
 '''
 
 lastCommand = 'none'
+@route('/favicon.ico')
+def fav_serve():
+  return duckfavicon.favicon
+
 @route('/')
 @auth_basic(check)
 def index():
