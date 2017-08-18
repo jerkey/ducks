@@ -1,5 +1,14 @@
-from bottle import route, run
+from bottle import route, run, auth_basic
 from subprocess import call
+
+authfile = open('authfile','r') # first line of file is login, second is password
+lines=authfile.readlines()
+
+def check(user, pw):
+  if user == lines[0].strip() and pw == lines[1].strip():
+    return True
+  else:
+    return False
 
 hello='''
     <style> td, a { font-size: 4em; } table, .btn { display: block; }
@@ -15,22 +24,26 @@ hello='''
 
 lastCommand = 'none'
 @route('/')
+@auth_basic(check)
 def index():
   return lastCommand+hello
 
 @route('/ducks/open')
+@auth_basic(check)
 def ducks_open():
   call(["duckopen &"],shell=True)
   lastCommand = 'open'
   return lastCommand+hello
 
 @route('/ducks/close')
+@auth_basic(check)
 def ducks_close():
   call(["duckclose &"],shell=True)
   lastCommand = 'closed'
   return lastCommand+hello
 
 @route('/ducks/stop')
+@auth_basic(check)
 def ducks_stop():
   call(["duckstop"],shell=True)
   lastCommand = 'stopped'
