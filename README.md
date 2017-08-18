@@ -1,17 +1,7 @@
-# icecreamcart
+# ducks
 
-The ice cream cart that became sentient. Using GPIO controls for raspberrypi.
+take care of ducks from thousands of miles away.  open and close the door to their cage, activate their food dispenser, etc.
 
-## Putting it together
+## hardware
 
-Inspired from this GPIO how to writeup: 
-https://sites.google.com/site/semilleroadt/raspberry-pi-tutorials/gpio
-
-Board: https://i.pinimg.com/originals/95/30/46/953046f96aeb9ab53eb91abff2b24bc8.jpg
-
-green -> 5v
-blue -> 25/dir1
-purple -> 24/pwm1
-grey -> 23/dir2
-white -> 22/pwm2
-black -> ground
+an arduino controlling some relays making a crude H-bridge to move a motorized linear actuator to open and close the door of a duck coop, more hardware (and docs) coming
