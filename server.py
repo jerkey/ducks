@@ -1,4 +1,4 @@
-from bottle import route, run, auth_basic
+from bottle import route, run, auth_basic, redirect, request
 from subprocess import call
 
 import duckfavicon
@@ -24,7 +24,6 @@ hello=duckfavicon.favicon+'''
     </table>
 '''
 
-lastCommand = 'none'
 @route('/favicon.ico')
 def fav_serve():
   return duckfavicon.favicon
@@ -32,27 +31,25 @@ def fav_serve():
 @route('/')
 @auth_basic(check)
 def index():
+  lastCommand = request.query.get('lastCommand', '')
   return lastCommand+hello
 
 @route('/ducks/open')
 @auth_basic(check)
 def ducks_open():
   call(["duckopen &"],shell=True)
-  lastCommand = 'open'
-  return lastCommand+hello
+  return redirect('/?lastCommand=open')
 
 @route('/ducks/close')
 @auth_basic(check)
 def ducks_close():
   call(["duckclose &"],shell=True)
-  lastCommand = 'closed'
-  return lastCommand+hello
+  return redirect('/?lastCommand=closed')
 
 @route('/ducks/stop')
 @auth_basic(check)
 def ducks_stop():
   call(["duckstop"],shell=True)
-  lastCommand = 'stopped'
-  return lastCommand+hello
+  return redirect('/?lastCommand=stopped')
 
 run(host='0.0.0.0', port=8100)
