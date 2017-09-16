@@ -1,7 +1,8 @@
 from bottle import route, run, auth_basic, redirect, request
-from subprocess import call
 
-import duckfavicon
+import duckfavicon, serial
+
+arduino = serial.Serial(port='/dev/serial/by-id/usb-Arduino__www.arduino.cc__0043_A41323739353519050D0-if00', baudrate=9600)
 
 authfile = open('authfile','r') # first line of file is login, second is password
 lines=authfile.readlines()
@@ -37,19 +38,19 @@ def index():
 @route('/ducks/open')
 @auth_basic(check)
 def ducks_open():
-  call(["duckopen &"],shell=True)
+  arduino.write('1')
   return redirect('/?lastCommand=open')
 
 @route('/ducks/close')
 @auth_basic(check)
 def ducks_close():
-  call(["duckclose &"],shell=True)
+  arduino.write('2')
   return redirect('/?lastCommand=closed')
 
 @route('/ducks/stop')
 @auth_basic(check)
 def ducks_stop():
-  call(["duckstop"],shell=True)
+  arduino.write('0')
   return redirect('/?lastCommand=stopped')
 
 run(host='0.0.0.0', port=8100)
