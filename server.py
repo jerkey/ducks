@@ -13,7 +13,7 @@ def check(user, pw):
     return False
 
 hello=duckfavicon.favicon+'''
-    <style> td, a { font-size: 4em; } table, .btn { display: block; }
+    <style> td, a { text-decoration: none; font-size: 4em; padding: 10px; } table, .btn { display: block; }
     .open { background-color: green; } .stop{ background-color: red; } .close{ background-color: yellow; }
     </style><table>
     <tr><td><a class='btn open' href=/ducks/open>open</a></td>
