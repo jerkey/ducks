@@ -61,5 +61,13 @@ def ducks_stop():
   logfile.flush()
   return redirect('/?lastCommand=stopped')
 
+@route('/ducks/test')
+@auth_basic(check)
+def ducks_test():
+  arduino.write('t') # t doesn't do anything, we're just testing serial write
+  logfile.write(str(datetime.datetime.today())+' TEST\n')
+  logfile.flush()
+  return redirect('/?lastCommand=tested')
+
 logfile.write(str(datetime.datetime.today())+' server initialized\n')
 run(host='0.0.0.0', port=8100)
