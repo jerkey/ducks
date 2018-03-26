@@ -5,6 +5,7 @@ import datetime
 
 arduino = serial.Serial(port='/dev/serial/by-id/usb-Arduino__www.arduino.cc__0043_A41323739353519050D0-if00', baudrate=9600)
 
+lastCommand = '' # remember the last thing that was done
 authfile = open('authfile','r') # first line of file is login, second is password
 lines=authfile.readlines()
 logfile = open('/tmp/ducks.log','wa') # open logfile for appending
@@ -34,40 +35,49 @@ def fav_serve():
 @route('/')
 @auth_basic(check)
 def index():
-  lastCommand = request.query.get('lastCommand', '')
+  global lastCommand
+  #lastCommand = request.query.get('lastCommand', '')
   return lastCommand+hello
 
 @route('/ducks/open')
 @auth_basic(check)
 def ducks_open():
+  global lastCommand
   arduino.write('1')
-  logfile.write(str(datetime.datetime.today())+' OPEN\n')
+  lastCommand = str(datetime.datetime.today())+' OPEN\n'
+  logfile.write(lastCommand)
   logfile.flush()
   return redirect('/?lastCommand=open')
 
 @route('/ducks/close')
 @auth_basic(check)
 def ducks_close():
+  global lastCommand
   arduino.write('2')
-  logfile.write(str(datetime.datetime.today())+' CLOSE\n')
+  lastCommand = str(datetime.datetime.today())+' CLOSE\n'
+  logfile.write(lastCommand)
   logfile.flush()
   return redirect('/?lastCommand=closed')
 
 @route('/ducks/stop')
 @auth_basic(check)
 def ducks_stop():
+  global lastCommand
   arduino.write('0')
-  logfile.write(str(datetime.datetime.today())+' STOP\n')
+  lastCommand = str(datetime.datetime.today())+' STOP\n'
+  logfile.write(lastCommand)
   logfile.flush()
   return redirect('/?lastCommand=stopped')
 
 @route('/ducks/test')
 @auth_basic(check)
 def ducks_test():
+  global lastCommand
   arduino.write('t') # t doesn't do anything, we're just testing serial write
   logfile.write(str(datetime.datetime.today())+' TEST\n')
   logfile.flush()
   return redirect('/?lastCommand=tested')
 
-logfile.write(str(datetime.datetime.today())+' server initialized\n')
+lastCommand = str(datetime.datetime.today())+' server initialized\n'
+logfile.write(lastCommand)
 run(host='0.0.0.0', port=8100)
