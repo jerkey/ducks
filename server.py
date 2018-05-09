@@ -19,6 +19,15 @@ def check(user, pw):
   else:
     return False
 
+def sendCommand(command):
+  global arduino
+  try:
+    arduino.write(command)
+  except serial.SerialException:
+    arduino.close()
+    arduino = serial.Serial(port=serialPort, baudrate=baudRate)
+    arduino.write(command)
+
 hello=duckfavicon.favicon+'''
     <style> td, a { text-decoration: none; font-size: 4em; padding: 10px; } table, .btn { display: block; }
     .open { background-color: green; } .stop{ background-color: red; } .close{ background-color: yellow; }
@@ -46,7 +55,7 @@ def index():
 @auth_basic(check)
 def ducks_open():
   global lastCommand
-  arduino.write('1')
+  sendCommand('1')
   lastCommand = str(datetime.datetime.today())+' OPEN\n'
   logfile.write(lastCommand)
   logfile.flush()
@@ -56,7 +65,7 @@ def ducks_open():
 @auth_basic(check)
 def ducks_close():
   global lastCommand
-  arduino.write('2')
+  sendCommand('2')
   lastCommand = str(datetime.datetime.today())+' CLOSE\n'
   logfile.write(lastCommand)
   logfile.flush()
@@ -66,7 +75,7 @@ def ducks_close():
 @auth_basic(check)
 def ducks_stop():
   global lastCommand
-  arduino.write('0')
+  sendCommand('0')
   lastCommand = str(datetime.datetime.today())+' STOP\n'
   logfile.write(lastCommand)
   logfile.flush()
@@ -76,7 +85,7 @@ def ducks_stop():
 @auth_basic(check)
 def ducks_test():
   global lastCommand
-  arduino.write('t') # t doesn't do anything, we're just testing serial write
+  sendCommand('t') # t doesn't do anything, we're just testing serial write
   logfile.write(str(datetime.datetime.today())+' TEST\n')
   logfile.flush()
   return redirect('/?lastCommand=tested')
