@@ -3,7 +3,10 @@ from bottle import route, run, auth_basic, redirect, request
 import duckfavicon, serial
 import datetime
 
-arduino = serial.Serial(port='/dev/serial/by-id/usb-Arduino__www.arduino.cc__0043_A41323739353519050D0-if00', baudrate=9600)
+serialPort = '/dev/serial/by-id/usb-Arduino__www.arduino.cc__0043_A41323739353519050D0-if00'
+baudRate = 9600
+
+arduino = serial.Serial(port=serialPort, baudrate=baudRate)
 
 lastCommand = '' # remember the last thing that was done
 authfile = open('authfile','r') # first line of file is login, second is password
